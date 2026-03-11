@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadwal UTBK Aisyah – UI Psikologi 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:#FFF8EE; --warm:#F5E6C8; --gold:#C9922A; --gold-light:#E8B84B;
+    --brown:#6B3A1F; --red:#C0392B; --green:#27785A; --blue:#1A4A7A;
+    --purple:#5B3A8A; --ink:#1C1208; --muted:#8B7355;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream);font-family:'DM Sans',sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:0.4;}
+  .page{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
+
+  /* HEADER */
+  .header{text-align:center;margin-bottom:36px;}
+  .header-tag{display:inline-block;background:var(--gold);color:white;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:6px 18px;border-radius:2px;margin-bottom:14px;}
+  .header h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;line-height:1.1;color:var(--brown);margin-bottom:6px;}
+  .header h1 span{color:var(--gold);display:block;}
+  .header-sub{font-size:13px;color:var(--muted);}
+  .header-divider{width:60px;height:3px;background:var(--gold);margin:14px auto;border-radius:2px;}
+
+  /* COUNTDOWN */
+  .countdown-bar{background:var(--brown);color:white;border-radius:12px;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;position:relative;overflow:hidden;}
+  .countdown-bar::after{content:'🐔';position:absolute;right:16px;bottom:-6px;font-size:52px;opacity:0.1;}
+  .countdown-left h3{font-size:12px;font-weight:500;opacity:0.7;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+  .countdown-left p{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;}
+  .countdown-stats{display:flex;gap:12px;flex-wrap:wrap;}
+  .stat-box{text-align:center;background:rgba(255,255,255,0.1);padding:10px 14px;border-radius:8px;min-width:64px;}
+  .stat-box .num{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--gold-light);display:block;}
+  .stat-box .lbl{font-size:10px;opacity:0.65;text-transform:uppercase;letter-spacing:1px;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+  .pulse{animation:pulse 1s ease-in-out infinite;}
+
+  /* SUBTEST MAP */
+  .subtest-map{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;}
+  .subtest-group{border-radius:12px;padding:16px 18px;border:1.5px solid;}
+  .group-tps{background:#F0F5FF;border-color:#BACFF5;}
+  .group-lit{background:#F0FAF4;border-color:#A8DFC5;}
+  .subtest-group h4{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+  .group-tps h4{color:var(--blue);}
+  .group-lit h4{color:var(--green);}
+  .subtest-tags{display:flex;flex-wrap:wrap;gap:5px;}
+  .st{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11.5px;font-weight:600;border:1px solid;}
+  .st-pu  {background:#FFF8E0;color:#9B7A00;border-color:#E8D87A;}
+  .st-ppu {background:#FEF0FF;color:#7A009B;border-color:#E0A8EF;}
+  .st-pbm {background:#F0FAF4;color:#27785A;border-color:#A8DFC5;}
+  .st-pk  {background:#FEF4F0;color:#C0392B;border-color:#F5C2B0;}
+  .st-lbi {background:#EFF5FF;color:#1A4A7A;border-color:#9DC0F5;}
+  .st-lbe {background:#F5FFFC;color:#0A6650;border-color:#7ADFC5;}
+  .st-pm  {background:#FFF0F5;color:#8A1A4A;border-color:#F5A8C5;}
+  .st.lemah{outline:2px solid #C0392B;outline-offset:1px;}
+  .lemah-note{font-size:11px;color:#C0392B;margin-top:8px;font-weight:600;}
+
+  /* ANALISIS */
+  .analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px;}
+  .analysis-card{border-radius:12px;padding:18px 20px;border:1.5px solid transparent;position:relative;overflow:hidden;}
+  .analysis-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;}
+  .card-kekuatan{background:#F0FAF4;border-color:#A8DFC5;}
+  .card-kekuatan::before{background:var(--green);}
+  .card-kelemahan{background:#FEF4F0;border-color:#F5C2B0;}
+  .card-kelemahan::before{background:var(--red);}
+  .card-strategi{background:#F0F5FF;border-color:#BACFF5;grid-column:1/-1;}
+  .card-strategi::before{background:var(--blue);}
+  .analysis-card h4{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+  .card-kekuatan h4{color:var(--green);}
+  .card-kelemahan h4{color:var(--red);}
+  .card-strategi h4{color:var(--blue);}
+  .analysis-card ul{list-style:none;font-size:13px;line-height:1.9;}
+  .analysis-card ul li::before{content:'→ ';opacity:0.45;font-weight:700;}
+
+  /* SECTION */
+  .section-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:var(--brown);margin-bottom:4px;margin-top:32px;}
+  .section-sub{font-size:13px;color:var(--muted);margin-bottom:16px;}
+  .phase-label{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+  .phase-label.ramadan{background:#FFF3CC;color:#9B7A00;border:1.5px solid #E8D87A;}
+  .phase-label.pasca{background:#E8F0FF;color:var(--blue);border:1.5px solid #BACFF5;}
+
+  /* FASE BOX */
+  .fase-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;}
+  .fase-card{border-radius:12px;padding:18px 20px;border:1.5px solid;}
+  .fase-ramadan{background:#FFF8E0;border-color:#E8D87A;}
+  .fase-pasca{background:#F0F5FF;border-color:#BACFF5;}
+  .fase-card h4{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+  .fase-ramadan h4{color:#9B7A00;}
+  .fase-pasca h4{color:var(--blue);}
+  .fase-card .jam{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--ink);}
+  .fase-card .desc{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.65;}
+
+  /* WEEK */
+  .week-block{margin-bottom:22px;border-radius:14px;overflow:hidden;border:1.5px solid var(--warm);box-shadow:0 2px 10px rgba(107,58,31,0.06);}
+  .week-header{padding:13px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .w1 .week-header{background:#C9922A;}
+  .w2 .week-header{background:#1A4A7A;}
+  .w3 .week-header{background:#27785A;}
+  .w4 .week-header{background:#5B3A8A;}
+  .w5 .week-header{background:#B7440A;}
+  .wlast .week-header{background:#C0392B;}
+  .week-header h3{color:white;font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;}
+  .week-header .week-tag{background:rgba(255,255,255,0.18);color:white;font-size:10px;font-weight:600;letter-spacing:1px;padding:4px 12px;border-radius:20px;text-transform:uppercase;}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:white;}
+  thead tr{background:var(--warm);}
+  thead th{padding:9px 12px;text-align:left;font-weight:600;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--brown);}
+  tbody tr{border-bottom:1px solid #F0E8D8;}
+  tbody tr:hover{background:#FFFBF4;}
+  tbody tr:last-child{border-bottom:none;}
+  td{padding:10px 12px;vertical-align:top;line-height:1.55;}
+  .day-col{font-weight:700;color:var(--brown);white-space:nowrap;width:85px;}
+  .time-col{color:var(--muted);font-size:11px;white-space:nowrap;width:110px;}
+
+  .focus-badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;margin:1px 2px 2px 0;border:1px solid;}
+  .badge-pk  {background:#FEF4F0;color:#C0392B;border-color:#F5C2B0;}
+  .badge-pm  {background:#FFF0F5;color:#8A1A4A;border-color:#F5A8C5;}
+  .badge-ppu {background:#FEF0FF;color:#7A009B;border-color:#E0A8EF;}
+  .badge-pbm {background:#F0FAF4;color:#27785A;border-color:#A8DFC5;}
+  .badge-pu  {background:#FFF8E0;color:#9B7A00;border-color:#E8D87A;}
+  .badge-lbi {background:#EFF5FF;color:#1A4A7A;border-color:#9DC0F5;}
+  .badge-lbe {background:#F5FFFC;color:#0A6650;border-color:#7ADFC5;}
+  .badge-to  {background:#1C1208;color:white;border-color:#1C1208;}
+  .badge-rest{background:#F8F8F8;color:#888;border-color:#DDD;}
+  .badge-malam{background:#1A0A3A;color:#C9A8FF;border-color:#5B3A8A;}
+
+  .tools-col span{display:inline-block;background:var(--warm);border-radius:4px;padding:1px 6px;margin:1px;font-size:10.5px;color:var(--brown);font-weight:500;}
+  .notes-col{font-size:11px;color:#777;font-style:italic;}
+
+  /* MOTIVASI */
+  .motivasi-section{margin-top:40px;background:var(--brown);border-radius:16px;padding:32px 28px;color:white;position:relative;overflow:hidden;}
+  .motivasi-section::before{content:'"';font-family:'Playfair Display',serif;font-size:160px;color:rgba(255,255,255,0.05);position:absolute;top:-20px;left:12px;line-height:1;}
+  .motivasi-section h2{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold-light);margin-bottom:18px;position:relative;}
+  .motivasi-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative;}
+  .motive-item{background:rgba(255,255,255,0.07);border-radius:10px;padding:14px 16px;border-left:3px solid var(--gold-light);}
+  .motive-item .emoji{font-size:20px;margin-bottom:6px;display:block;}
+  .motive-item p{font-size:13px;line-height:1.65;opacity:0.9;}
+  .motive-item strong{color:var(--gold-light);}
+  .closing-quote{margin-top:22px;text-align:center;font-family:'Playfair Display',serif;font-size:1.1rem;font-style:italic;color:var(--gold-light);position:relative;}
+
+  .tips-box{margin-top:24px;background:#FFFBF0;border:1.5px solid var(--gold);border-radius:12px;padding:20px 22px;}
+  .tips-box h4{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold);margin-bottom:10px;}
+  .tips-list{list-style:none;font-size:13px;line-height:2;color:var(--ink);columns:2;column-gap:24px;}
+  .tips-list li::before{content:'✓ ';color:var(--gold);font-weight:700;}
+
+  .footer{text-align:center;margin-top:40px;font-size:11.5px;color:var(--muted);letter-spacing:0.5px;}
+
+  @media(max-width:600px){
+    .analysis-grid,.fase-row,.motivasi-grid,.subtest-map{grid-template-columns:1fr;}
+    .card-strategi{grid-column:1;}
+    .tips-list{columns:1;}
+    table{font-size:11px;}
+    td{padding:8px 8px;}
+    .countdown-bar{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-tag">🐔 Chicken DAU × UI Psikologi</div>
+    <h1>Jadwal Belajar Aisyah<span>UTBK 2026</span></h1>
+    <div class="header-divider"></div>
+    <p class="header-sub">11 Maret – 21 April 2026 &nbsp;·&nbsp; Bimbel Kak Sugeng &nbsp;·&nbsp; Target: Lolos UI Psikologi</p>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <div class="countdown-bar">
+    <div class="countdown-left">
+      <h3>⏳ Countdown Hari H — Realtime</h3>
+      <p id="countdown-text" style="color:var(--gold-light)">Menghitung...</p>
+    </div>
+    <div class="countdown-stats">
+      <div class="stat-box"><span class="num" id="cd-hari">--</span><span class="lbl">Hari</span></div>
+      <div class="stat-box"><span class="num pulse" id="cd-jam">--</span><span class="lbl">Jam</span></div>
+      <div class="stat-box"><span class="num pulse" id="cd-menit">--</span><span class="lbl">Menit</span></div>
+      <div class="stat-box"><span class="num pulse" id="cd-detik">--</span><span class="lbl">Detik</span></div>
+    </div>
+  </div>
+
+  <!-- PETA SUBTEST -->
+  <div class="section-title">📋 Peta Subtest UTBK 2026</div>
+  <p class="section-sub">7 subtest — yang dilingkari merah = fokus utama Aisyah</p>
+  <div class="subtest-map">
+    <div class="subtest-group group-tps">
+      <h4>🧠 TPS — Tes Potensi Skolastik</h4>
+      <div class="subtest-tags">
+        <span class="st st-pu">PU – Penalaran Umum</span>
+        <span class="st st-ppu">PPU – Pengetahuan & Pemahaman Umum</span>
+        <span class="st st-pbm">PBM – Pemahaman Bacaan & Menulis</span>
+        <span class="st st-pk lemah">PK – Pengetahuan Kuantitatif ⚠️</span>
+      </div>
+      <div class="lemah-note">⚠️ PK = fokus utama (lemah)</div>
+    </div>
+    <div class="subtest-group group-lit">
+      <h4>📚 Literasi & Penalaran</h4>
+      <div class="subtest-tags">
+        <span class="st st-lbi">LBI – Literasi Bahasa Indonesia</span>
+        <span class="st st-lbe">LBE – Literasi Bahasa Inggris</span>
+        <span class="st st-pm lemah">PM – Penalaran Matematika ⚠️</span>
+      </div>
+      <div class="lemah-note">⚠️ PM = fokus utama (lemah)</div>
+    </div>
+  </div>
+
+  <!-- FASE WAKTU -->
+  <div class="section-title">🕐 Fase Waktu Belajar</div>
+  <p class="section-sub">Disesuaikan dengan Ramadan & pasca-Lebaran + jadwal jualan jam 15.00</p>
+  <div class="fase-row">
+    <div class="fase-card fase-ramadan">
+      <h4>🌙 Fase Ramadan — s.d. ~29 Maret</h4>
+      <div class="jam">07.00 – 14.00</div>
+      <div class="desc">Belajar pagi–siang sebelum jualan (15.00)<br>+ <strong>TO malam jam 22.00</strong> tiap malam<br>Analisis hasil TO keesokan paginya</div>
+    </div>
+    <div class="fase-card fase-pasca">
+      <h4>☀️ Pasca-Ramadan — 1 April dst.</h4>
+      <div class="jam">16.00 – 23.00</div>
+      <div class="desc">Belajar sore–malam setelah istirahat<br>Lebih fleksibel & energi lebih stabil<br>Tidak ada TO tengah malam lagi</div>
+    </div>
+  </div>
+
+  <!-- ANALISIS -->
+  <div class="section-title">📊 Analisis Situasi</div>
+  <p class="section-sub">Kondisi sekarang, fokus utama, dan strategi 41 hari ke depan</p>
+  <div class="analysis-grid">
+    <div class="analysis-card card-kekuatan">
+      <h4>💪 Kekuatan</h4>
+      <ul>
+        <li>PU, PPU, PBM, LBI, LBE sudah di kisaran 600–700</li>
+        <li>Punya 3 platform belajar: Pahamify, Analitica, Cerebrum</li>
+        <li>Mental disiplin dari pengalaman jualan harian</li>
+        <li>TO malam Ramadan jam 22.00 — konsisten luar biasa!</li>
+        <li>Skor 639 sudah sangat dekat ambang batas masuk</li>
+      </ul>
+    </div>
+    <div class="analysis-card card-kelemahan">
+      <h4>⚠️ Fokus Utama</h4>
+      <ul>
+        <li>PK (Pengetahuan Kuantitatif) — dasar matematika & logika numerik</li>
+        <li>PM (Penalaran Matematika) — soal cerita kehidupan sehari-hari</li>
+        <li>Waktu Ramadan terbatas + energi lebih terkuras</li>
+        <li>Risiko burnout — harus dikelola dengan istirahat cukup</li>
+      </ul>
+    </div>
+    <div class="analysis-card card-strategi">
+      <h4>🎯 Strategi: 70% ke PK & PM, 30% Maintain Sisanya</h4>
+      <ul>
+        <li><strong>PK & PM</strong> — drill soal tipe UTBK tiap hari, pahami pola soal, kecepatan + akurasi</li>
+        <li><strong>PU, PPU, PBM, LBI, LBE</strong> — cukup 1 sesi latihan tiap 2–3 hari untuk maintain skor</li>
+        <li><strong>Pahamify</strong> untuk materi & konsep · <strong>Cerebrum</strong> untuk TO · <strong>Analitica</strong> untuk evaluasi pola kesalahan</li>
+        <li>Pola Ramadan: <em>Analisis TO pagi → Materi baru → Latihan soal → TO malam</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- JADWAL -->
+  <div class="section-title">📅 Jadwal Mingguan</div>
+
+  <div class="phase-label ramadan">🌙 Fase 1 — Ramadan (11–29 Maret)</div>
+
+  <!-- MINGGU 1 -->
+  <div class="week-block w1">
+    <div class="week-header">
+      <h3>📌 Minggu 1 — 11–15 Maret</h3>
+      <span class="week-tag">Fondasi PK & PM</span>
+    </div>
+    <table>
+      <thead><tr><th>Hari</th><th>Waktu</th><th>Fokus Belajar</th><th>Platform</th><th>Catatan</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="day-col">Selasa<br>11 Mar</td>
+          <td class="time-col">07.00–09.30<br>10.00–12.00<br>13.00–14.00<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-pk">PK – Operasi Bilangan & Logika Numerik</span><br>
+            <span class="focus-badge badge-pm">PM – Aljabar & Persamaan Linear</span><br>
+            <span class="focus-badge badge-pbm">PBM – Review ringan</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam #1</span>
+          </td>
+          <td class="tools-col"><span>Pahamify</span><span>Cerebrum</span></td>
+          <td class="notes-col">Mulai hari ini! Kenali pola soal PK & PM UTBK.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Rabu<br>12 Mar</td>
+          <td class="time-col">07.00–08.00<br>08.30–11.00<br>11.30–13.30<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-to">Analisis TO Malam #1</span><br>
+            <span class="focus-badge badge-pk">PK – Barisan, Deret & Pola Bilangan</span><br>
+            <span class="focus-badge badge-pm">PM – Persamaan Kuadrat & Soal Cerita</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam #2</span>
+          </td>
+          <td class="tools-col"><span>Analitica</span><span>Pahamify</span></td>
+          <td class="notes-col">Analisis dulu pagi, baru masuk materi baru.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Kamis<br>13 Mar</td>
+          <td class="time-col">07.00–08.00<br>08.30–11.00<br>11.30–13.30<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-to">Analisis TO Malam #2</span><br>
+            <span class="focus-badge badge-pk">PK – Statistika Dasar (mean, median, modus)</span><br>
+            <span class="focus-badge badge-pu">PU – 15 soal penalaran (maintain)</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam #3</span>
+          </td>
+          <td class="tools-col"><span>Analitica</span><span>Pahamify</span></td>
+          <td class="notes-col">PU cukup maintain — jangan sampai drop.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Jumat<br>14 Mar</td>
+          <td class="time-col">07.00–08.00<br>08.30–11.00<br>11.30–13.30<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-to">Analisis TO Malam #3</span><br>
+            <span class="focus-badge badge-pm">PM – Fungsi, Grafik & Interpretasi Data</span><br>
+            <span class="focus-badge badge-lbe">LBE – 1 teks reading (maintain)</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam #4</span>
+          </td>
+          <td class="tools-col"><span>Pahamify</span><span>Cerebrum</span></td>
+          <td class="notes-col">LBE jangan sampai karat — latihan ringan saja.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Sabtu<br>15 Mar</td>
+          <td class="time-col">07.00–08.00<br>08.30–12.00<br>13.00–14.00<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-to">Analisis TO Malam #4</span><br>
+            <span class="focus-badge badge-pk">PK – Drill 30 soal campuran minggu ini</span><br>
+            <span class="focus-badge badge-ppu">PPU – Review teks & pemahaman umum</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam Mingguan #1 (full)</span>
+          </td>
+          <td class="tools-col"><span>Analitica</span><span>Cerebrum</span></td>
+          <td class="notes-col">Evaluasi: subtest mana yang naik minggu ini?</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MINGGU 2 -->
+  <div class="week-block w2">
+    <div class="week-header">
+      <h3>📌 Minggu 2 — 16–22 Maret</h3>
+      <span class="week-tag">Intensifikasi + Mulai Bimbel Kak Sugeng</span>
+    </div>
+    <table>
+      <thead><tr><th>Hari</th><th>Waktu</th><th>Fokus Belajar</th><th>Platform</th><th>Catatan</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="day-col">Minggu<br>16 Mar</td>
+          <td class="time-col">07.00–09.30<br>10.00–12.30<br>13.00–14.00<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-pk">PK – Peluang & Kombinatorika</span><br>
+            <span class="focus-badge badge-pm">PM – Geometri dalam Konteks Nyata</span><br>
+            <span class="focus-badge badge-lbi">LBI – 1 set soal teks wacana (maintain)</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam + sesi Kak Sugeng</span>
+          </td>
+          <td class="tools-col"><span>Pahamify</span><span>Cerebrum</span></td>
+          <td class="notes-col">Hari pertama bimbel Kak Sugeng! Catat semua tipsnya.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Senin–Jumat<br>17–21 Mar</td>
+          <td class="time-col">07.00–08.00<br>08.30–12.00<br>12.00–14.00<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-to">Analisis TO malam sebelumnya (pagi)</span><br>
+            <span class="focus-badge badge-pk">PK – 1 topik baru + 25 soal drill/hari</span><br>
+            <span class="focus-badge badge-pm">PM – 1 topik baru + latihan/hari</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam tiap malam</span>
+          </td>
+          <td class="tools-col"><span>Pahamify</span><span>Cerebrum</span><span>Analitica</span></td>
+          <td class="notes-col">Sisipkan PU/PPU/PBM/LBI/LBE bergantian tiap 2 hari.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Sabtu<br>22 Mar</td>
+          <td class="time-col">07.00–08.30<br>09.00–12.00<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-to">Evaluasi mingguan semua subtest</span><br>
+            <span class="focus-badge badge-pk">Review soal PK & PM yang salah</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam Mingguan #2 (full)</span>
+          </td>
+          <td class="tools-col"><span>Analitica</span><span>Cerebrum</span></td>
+          <td class="notes-col">Target: Skor TO naik ke 645–650.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MINGGU 3 -->
+  <div class="week-block w3">
+    <div class="week-header">
+      <h3>📌 Minggu 3 — 23–29 Maret</h3>
+      <span class="week-tag">Sprint Akhir Ramadan</span>
+    </div>
+    <table>
+      <thead><tr><th>Hari</th><th>Waktu</th><th>Fokus Belajar</th><th>Platform</th><th>Catatan</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="day-col">Minggu<br>23 Mar</td>
+          <td class="time-col">07.00–12.00<br>13.00–14.00<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-to">SIMULASI PENUH — kondisi real UTBK</span><br>
+            <span class="focus-badge badge-pk">Review hasil → fokus PK & PM</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam + analisis mendalam</span>
+          </td>
+          <td class="tools-col"><span>Cerebrum</span><span>Analitica</span></td>
+          <td class="notes-col">Latih manajemen waktu per subtest.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Senin–Jumat<br>24–28 Mar</td>
+          <td class="time-col">07.00–08.00<br>08.30–12.00<br>12.00–14.00<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-to">Analisis TO malam sebelumnya</span><br>
+            <span class="focus-badge badge-pk">PK – Soal level tinggi tipe UTBK</span><br>
+            <span class="focus-badge badge-pm">PM – Soal prediksi & pembahasan</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam tiap malam</span>
+          </td>
+          <td class="tools-col"><span>Pahamify</span><span>Cerebrum</span></td>
+          <td class="notes-col">Jaga stamina — istirahat sebentar setelah sahur.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Sabtu<br>29 Mar</td>
+          <td class="time-col">07.00–10.00<br>10.00–13.00<br>22.00–23.30</td>
+          <td>
+            <span class="focus-badge badge-to">Evaluasi + rekap progres fase Ramadan</span><br>
+            <span class="focus-badge badge-rest">Istirahat — siap-siap Lebaran 🌙</span><br>
+            <span class="focus-badge badge-malam">🌙 TO Malam terakhir Ramadan</span>
+          </td>
+          <td class="tools-col"><span>Analitica</span></td>
+          <td class="notes-col">Target: Skor ≥ 655. Selamat Hari Raya! 🎉</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="phase-label pasca" style="margin-top:28px;">☀️ Fase 2 — Pasca-Ramadan (1–21 April)</div>
+
+  <!-- MINGGU 4 -->
+  <div class="week-block w4">
+    <div class="week-header">
+      <h3>📌 Minggu 4 — 1–5 April</h3>
+      <span class="week-tag">Recharge & Re-akselerasi</span>
+    </div>
+    <table>
+      <thead><tr><th>Hari</th><th>Waktu</th><th>Fokus Belajar</th><th>Platform</th><th>Catatan</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="day-col">Selasa–Rabu<br>1–2 Apr</td>
+          <td class="time-col">16.00–19.00<br>19.30–21.30</td>
+          <td>
+            <span class="focus-badge badge-rest">Recovery pasca-Lebaran — ringan dulu</span><br>
+            <span class="focus-badge badge-pk">PK – Review materi Ramadan</span><br>
+            <span class="focus-badge badge-pm">PM – Review + soal ringan</span>
+          </td>
+          <td class="tools-col"><span>Pahamify</span></td>
+          <td class="notes-col">Jangan langsung full gas, adaptasi ritme baru.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Kamis–Sabtu<br>3–5 Apr</td>
+          <td class="time-col">16.00–19.30<br>20.00–23.00</td>
+          <td>
+            <span class="focus-badge badge-pk">PK – Drill 30 soal tipe UTBK</span><br>
+            <span class="focus-badge badge-pm">PM – Soal cerita & logika matematika</span><br>
+            <span class="focus-badge badge-ppu">PPU + PBM – 1 set/hari bergantian</span>
+          </td>
+          <td class="tools-col"><span>Pahamify</span><span>Cerebrum</span></td>
+          <td class="notes-col">Waktu lebih longgar sekarang — manfaatkan!</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MINGGU 5 -->
+  <div class="week-block w5">
+    <div class="week-header">
+      <h3>📌 Minggu 5 — 6–12 April</h3>
+      <span class="week-tag">Simulasi & Pemantapan</span>
+    </div>
+    <table>
+      <thead><tr><th>Hari</th><th>Waktu</th><th>Fokus Belajar</th><th>Platform</th><th>Catatan</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="day-col">Minggu<br>6 Apr</td>
+          <td class="time-col">16.00–20.30<br>21.00–23.00</td>
+          <td>
+            <span class="focus-badge badge-to">SIMULASI PENUH #2 — kondisi real</span><br>
+            <span class="focus-badge badge-pk">Analisis hasil + strategi per subtest</span>
+          </td>
+          <td class="tools-col"><span>Cerebrum</span><span>Analitica</span></td>
+          <td class="notes-col">Target: Skor ≥ 670. Cek subtest yang masih drop.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Senin–Kamis<br>7–10 Apr</td>
+          <td class="time-col">16.00–19.30<br>20.00–23.00</td>
+          <td>
+            <span class="focus-badge badge-pk">PK – Soal prediksi level tinggi</span><br>
+            <span class="focus-badge badge-pm">PM – Drill soal cerita kompleks</span><br>
+            <span class="focus-badge badge-lbe">LBE + LBI – Pemantapan teks</span>
+          </td>
+          <td class="tools-col"><span>Pahamify</span><span>Cerebrum</span></td>
+          <td class="notes-col">Kurangi materi baru, perkuat yang sudah ada.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Jumat<br>11 Apr</td>
+          <td class="time-col">16.00–20.30<br>21.00–23.00</td>
+          <td>
+            <span class="focus-badge badge-to">TO TERAKHIR INTENSIF — 7 subtest penuh</span><br>
+            <span class="focus-badge badge-pk">Analisis cepat + catat kesalahan final</span>
+          </td>
+          <td class="tools-col"><span>Cerebrum</span><span>Analitica</span></td>
+          <td class="notes-col">Target: Skor ≥ 680. TO paling penting!</td>
+        </tr>
+        <tr>
+          <td class="day-col">Sabtu<br>12 Apr</td>
+          <td class="time-col">16.00–19.00</td>
+          <td>
+            <span class="focus-badge badge-pk">Review catatan kesalahan all-time</span><br>
+            <span class="focus-badge badge-rest">Mulai jaga pola tidur</span>
+          </td>
+          <td class="tools-col"><span>Analitica</span></td>
+          <td class="notes-col">Tidur lebih awal dari sekarang.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MINGGU TERAKHIR -->
+  <div class="week-block wlast">
+    <div class="week-header">
+      <h3>🔥 Minggu Terakhir — 13–21 April</h3>
+      <span class="week-tag">Final Touch & Hari H</span>
+    </div>
+    <table>
+      <thead><tr><th>Hari</th><th>Waktu</th><th>Fokus Belajar</th><th>Platform</th><th>Catatan</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="day-col">Minggu–Rabu<br>13–16 Apr</td>
+          <td class="time-col">16.00–20.00</td>
+          <td>
+            <span class="focus-badge badge-pk">PK – Review tipis, NO materi baru</span><br>
+            <span class="focus-badge badge-pm">PM – Baca catatan & pola soal</span><br>
+            <span class="focus-badge badge-rest">Maks 3–4 jam/hari</span>
+          </td>
+          <td class="tools-col"><span>Pahamify</span></td>
+          <td class="notes-col">Otak butuh recovery. Jangan dipaksakan!</td>
+        </tr>
+        <tr>
+          <td class="day-col">Kamis–Jumat<br>17–18 Apr</td>
+          <td class="time-col">16.00–18.00</td>
+          <td>
+            <span class="focus-badge badge-rest">Super ringan — baca catatan saja</span><br>
+            <span class="focus-badge badge-rest">Olahraga ringan + makan bergizi</span>
+          </td>
+          <td class="tools-col">–</td>
+          <td class="notes-col">Percaya prosesnya — kamu sudah kerja keras!</td>
+        </tr>
+        <tr>
+          <td class="day-col">Sabtu<br>19 Apr</td>
+          <td class="time-col">Siang</td>
+          <td>
+            <span class="focus-badge badge-rest">Survei lokasi ujian</span><br>
+            <span class="focus-badge badge-rest">Siapkan berkas, tidur jam 21.00</span>
+          </td>
+          <td class="tools-col">–</td>
+          <td class="notes-col">Cek lokasi, siapkan semua dokumen fisik.</td>
+        </tr>
+        <tr>
+          <td class="day-col">Minggu<br>20 Apr</td>
+          <td class="time-col">Seharian</td>
+          <td>
+            <span class="focus-badge badge-rest">H-1: Istirahat total</span><br>
+            <span class="focus-badge badge-rest">Makan enak, doa, tidur jam 21.00</span>
+          </td>
+          <td class="tools-col">–</td>
+          <td class="notes-col">Visualisasi: bayangkan mengerjakan soal dengan tenang.</td>
+        </tr>
+        <tr>
+          <td class="day-col" style="color:#C0392B;font-weight:800;">🎯 Senin<br>21 Apr</td>
+          <td class="time-col" style="color:#C0392B;font-weight:700;">HARI H!</td>
+          <td>
+            <span class="focus-badge badge-to" style="background:#C0392B;font-size:12px;padding:4px 14px;">✨ UTBK UI PSIKOLOGI 2026</span><br>
+            <span style="font-size:11.5px;color:#888;display:block;margin-top:5px;">Sarapan, berdoa, percaya diri — Aisyah bisa! 🐔</span>
+          </td>
+          <td class="tools-col">–</td>
+          <td class="notes-col">Tunjukkan semua kerja kerasmu!</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tips-box">
+    <h4>💡 Tips Harian Aisyah — Anti Burnout Mode</h4>
+    <ul class="tips-list">
+      <li>Analisis TO malam keesokan paginya, bukan langsung malam itu</li>
+      <li>TO malam maksimal 90 menit — otak butuh tidur</li>
+      <li>LBE: baca 1 artikel English/hari sambil sahur/buka aja</li>
+      <li>PPU & PBM: sisipkan tiap 2 hari supaya tidak karat</li>
+      <li>Tandai 3 soal PK & PM yang salah tiap hari, bahas besoknya</li>
+      <li>Gunakan Analitica tiap Sabtu untuk lihat tren skor semua subtest</li>
+      <li>H-3 sebelum ujian: stop semua materi baru</li>
+      <li>Buat "lembar rumus andalan" 1 halaman — baca tiap pagi</li>
+    </ul>
+  </div>
+
+  <div class="motivasi-section">
+    <h2>🔥 Analisis Penyemangat untuk Aisyah</h2>
+    <div class="motivasi-grid">
+      <div class="motive-item">
+        <span class="emoji">🐔</span>
+        <p><strong>Juragan ayam yang juga calon mahasiswa UI.</strong> Aisyah sudah terbukti bisa mengelola bisnis & belajar bersamaan. Mental pengusaha itu justru modal terbaik buat masuk UI Psikologi!</p>
+      </div>
+      <div class="motive-item">
+        <span class="emoji">📈</span>
+        <p>Skor <strong>639–642 bukan kecil.</strong> Kamu hanya butuh <strong>~60 poin lagi di PK & PM</strong> — sangat realistis dengan konsistensi 41 hari penuh dari sekarang.</p>
+      </div>
+      <div class="motive-item">
+        <span class="emoji">🌙</span>
+        <p>TO jam 22.00 di bulan puasa sambil jualan seharian? Itu <strong>ujian mental luar biasa.</strong> Kalau konsisten di Ramadan, di hari H kamu pasti jauh lebih siap dari pesaing lain.</p>
+      </div>
+      <div class="motive-item">
+        <span class="emoji">🧠</span>
+        <p>Psikologi UI bukan cuma mimpi — ini <strong>investasi untuk Chicken DAU.</strong> Ilmu psikologi akan bikin kamu lebih paham pelanggan, tim, dan strategi bisnis yang lebih kuat.</p>
+      </div>
+    </div>
+    <p class="closing-quote">"Kamu sudah berani bermimpi besar sambil tetap bekerja keras setiap hari. Itu bukan hal biasa — itu luar biasa." 🌟</p>
+  </div>
+
+  <div class="footer">
+    Jadwal khusus Aisyah – Chicken DAU × Target UI Psikologi 2026<br>
+    Konsistensi kecil setiap hari mengalahkan semangat besar yang tidak konsisten. 🐔
+  </div>
+
+</div>
+<script>
+  function updateCountdown() {
+    const target = new Date('2026-04-21T07:00:00');
+    const now = new Date();
+    const diff = target - now;
+    if (diff <= 0) {
+      document.getElementById('countdown-text').textContent = 'HARI H UTBK! Semangat Aisyah! 🎯';
+      ['cd-hari','cd-jam','cd-menit','cd-detik'].forEach(id => document.getElementById(id).textContent = '0');
+      return;
+    }
+    const hari  = Math.floor(diff / (1000*60*60*24));
+    const jam   = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const menit = Math.floor((diff % (1000*60*60)) / (1000*60));
+    const detik = Math.floor((diff % (1000*60)) / 1000);
+    document.getElementById('countdown-text').textContent =
+      hari + ' hari ' + String(jam).padStart(2,'0') + ' jam ' +
+      String(menit).padStart(2,'0') + ' menit menuju 21 April 2026';
+    document.getElementById('cd-hari').textContent  = hari;
+    document.getElementById('cd-jam').textContent   = String(jam).padStart(2,'0');
+    document.getElementById('cd-menit').textContent = String(menit).padStart(2,'0');
+    document.getElementById('cd-detik').textContent = String(detik).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>
